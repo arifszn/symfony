@@ -29,13 +29,11 @@ jobs:
       - name: Check for changes in translation files
         id: changed-translation-files
         run: |
-          # Define the paths to check
-          paths="src/**/Resources/translations/*.xlf"
-          # Use git diff to check if any of the paths have changed
-          if git diff --quiet HEAD~1 HEAD -- $paths; then
-            echo "::set-output name=changed::false"
-          else
+          CHANGED_FILES=$(git diff --quiet HEAD~1 HEAD -- src/**/Resources/translations/*.xlf)
+          if [[ ! -z "$CHANGED_FILES" ]]; then
             echo "::set-output name=changed::true"
+          else
+            echo "::set-output name=changed::false"
           fi
 
       - name: Check Translation Status
