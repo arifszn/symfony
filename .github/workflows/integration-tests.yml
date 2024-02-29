@@ -26,14 +26,10 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Check for changes in translation files
+      - uses: marceloprado/has-changed-path@v1.0.1
         id: changed-translation-files
-        run: |
-          if git diff --quiet HEAD~1 HEAD -- 'src/**/Resources/translations/*.xlf'; then
-            echo "{changed}={true}" >> $GITHUB_OUTPUT
-          else
-            echo "{changed}={false}" >> $GITHUB_OUTPUT
-          fi
+        with:
+          paths: src/**/Resources/translations/*.xlf
 
       - name: Check Translation Status
         if: steps.changed-translation-files.outputs.changed == 'true'
