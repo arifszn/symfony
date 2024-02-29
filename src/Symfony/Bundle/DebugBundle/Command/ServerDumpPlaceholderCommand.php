@@ -20,7 +20,7 @@ use Symfony\Component\VarDumper\Command\ServerDumpCommand;
 use Symfony\Component\VarDumper\Server\DumpServer;
 
 /**
- * A placeholder command easing VarDumper server discovery.
+ * A placeholder command easing VarDumper server discovery
  *
  * @author Maxime Steinhausser <maxime.steinhausser@gmail.com>
  *
