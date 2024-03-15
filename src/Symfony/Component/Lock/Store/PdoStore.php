@@ -333,7 +333,7 @@ class PdoStore implements PersistingStoreInterface
         $code = $exception->errorInfo ? $exception->errorInfo[1] : $exception->getCode();
 
         switch (true) {
-            case 'pgsql' === $driver && '42P01' === $code:
+            case 'pgsql' === $driver && str_contains($exception->getMessage(), '42P01'):
             case 'sqlite' === $driver && str_contains($exception->getMessage(), 'no such table:'):
             case 'oci' === $driver && 942 === $code:
             case 'sqlsrv' === $driver && 208 === $code:
