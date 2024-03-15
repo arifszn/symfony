@@ -600,8 +600,8 @@ class PdoAdapter extends AbstractAdapter implements PruneableInterface
 
     private function isTableMissing(\PDOException $exception): bool
     {
-        $driver = $this->driver;
         $exception = DBALPDOException::new($exception);
+        $driver = $this->driver;
 
         switch (true) {
             case 'pgsql' === $driver && '42P01' === $exception->getSQLState():
