@@ -12,6 +12,7 @@
 namespace Symfony\Component\Cache\Adapter;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Driver\PDO\Exception as DBALPDOException;
 use Doctrine\DBAL\Schema\Schema;
 use Psr\Cache\CacheItemInterface;
 use Psr\Log\LoggerInterface;
@@ -600,14 +601,14 @@ class PdoAdapter extends AbstractAdapter implements PruneableInterface
     private function isTableMissing(\PDOException $exception): bool
     {
         $driver = $this->driver;
-        $code = $exception->errorInfo ? $exception->errorInfo[1] : $exception->getCode();
+        $exception = DBALPDOException::new($exception);
 
         switch (true) {
-            case 'pgsql' === $driver && str_contains($exception->getMessage(), '42P01'):
+            case 'pgsql' === $driver && '42P01' === $exception->getSQLState():
             case 'sqlite' === $driver && str_contains($exception->getMessage(), 'no such table:'):
-            case 'oci' === $driver && 942 === $code:
-            case 'sqlsrv' === $driver && 208 === $code:
-            case 'mysql' === $driver && 1146 === $code:
+            case 'oci' === $driver && 942 === $exception->getCode():
+            case 'sqlsrv' === $driver && 208 === $exception->getCode():
+            case 'mysql' === $driver && 1146 === $exception->getCode():
                 return true;
             default:
                 return false;
